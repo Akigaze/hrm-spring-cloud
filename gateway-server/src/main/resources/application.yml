@@ -10,11 +10,9 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 
-# 自定义路由策略
 zuul:
   routes:
     employee-service: /gateway/employee/**
     department-service: /gateway/department/**
-#  删除默认的头部限制
   sensitive-headers:
   ignored-patterns: /*-service/**
