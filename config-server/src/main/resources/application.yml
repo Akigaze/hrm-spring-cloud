@@ -9,7 +9,7 @@ spring:
       server:
         git:
           uri: https://gitee.com/lzc199/config-cloud
-          username:
+          username: 454320130@qq.com
           password:
       profile: dev
 
