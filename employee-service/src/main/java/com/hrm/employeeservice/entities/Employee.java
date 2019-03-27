@@ -1,7 +1,8 @@
-package com.hrm.commonapi.entities;
+package com.hrm.employeeservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.hrm.commonapi.entities.BaseEntity;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,9 +64,9 @@ public class Employee extends BaseEntity {
   @Column(name = "GENDER", nullable = false)
   private String gender;
 
-  @JsonManagedReference
-  @JsonBackReference
-  @ManyToOne
-  @JoinColumn(name = "DEPARTMENT_ID")
-  private Department department;
+//  @JsonManagedReference
+//  @JsonBackReference
+//  @ManyToOne
+//  @JoinColumn(name = "DEPARTMENT_ID")
+//  private Department department;
 }

@@ -1,6 +1,7 @@
-package com.hrm.commonapi.entities;
+package com.hrm.departmentservice.entities;
 
 import com.google.common.collect.Lists;
+import com.hrm.commonapi.entities.BaseEntity;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,6 +40,6 @@ public class Department extends BaseEntity {
   @Column(name = "NAME", nullable = false)
   private String name;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", fetch = FetchType.LAZY)
-  private List<Employee> employees = Lists.newArrayList();
+//  @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", fetch = FetchType.LAZY)
+//  private List<Employee> employees = Lists.newArrayList();
 }

@@ -6,7 +6,6 @@
     <groupId>com.hrm</groupId>
     <artifactId>hrm-spring-cloud</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <artifactId>common-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>

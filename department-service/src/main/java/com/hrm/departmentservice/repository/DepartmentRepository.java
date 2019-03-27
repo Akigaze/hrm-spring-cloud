@@ -1,6 +1,7 @@
 package com.hrm.departmentservice.repository;
 
-import com.hrm.commonapi.entities.Department;
+
+import com.hrm.departmentservice.entities.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

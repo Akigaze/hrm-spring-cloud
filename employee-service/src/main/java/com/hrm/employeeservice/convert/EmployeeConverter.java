@@ -1,11 +1,9 @@
-package com.hrm.commonapi.convert;
+package com.hrm.employeeservice.convert;
 
 import static java.util.stream.Collectors.toList;
 
-import com.hrm.commonapi.dto.DepartmentDTO;
 import com.hrm.commonapi.dto.EmployeeDTO;
-import com.hrm.commonapi.entities.Department;
-import com.hrm.commonapi.entities.Employee;
+import com.hrm.employeeservice.entities.Employee;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +21,10 @@ public class EmployeeConverter {
   public EmployeeDTO convert2DTO(Employee employee) {
     EmployeeDTO employeeDTO = new EmployeeDTO();
     BeanUtils.copyProperties(employee, employeeDTO);
-    Department department = employee.getDepartment();
-    if (Objects.nonNull(department)) {
-      employeeDTO.setDepartment(new DepartmentDTO(department.getId(), department.getName()));
-    }
+//    Department department = employee.getDepartment();
+//    if (Objects.nonNull(department)) {
+//      employeeDTO.setDepartment(new DepartmentDTO(department.getId(), department.getName()));
+//    }
     return employeeDTO;
   }
 

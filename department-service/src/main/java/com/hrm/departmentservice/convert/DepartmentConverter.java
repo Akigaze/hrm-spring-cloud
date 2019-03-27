@@ -1,9 +1,9 @@
-package com.hrm.commonapi.convert;
+package com.hrm.departmentservice.convert;
 
 import static java.util.stream.Collectors.toList;
 
 import com.hrm.commonapi.dto.DepartmentDTO;
-import com.hrm.commonapi.entities.Department;
+import com.hrm.departmentservice.entities.Department;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
