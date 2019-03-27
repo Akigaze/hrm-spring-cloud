@@ -8,6 +8,14 @@
   <artifactId>hrm-spring-cloud</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>hrm-spring-cloud</name>
+  <packaging>pom</packaging>
+  <modules>
+    <module>eureka-server</module>
+    <module>config-server</module>
+    <module>gateway-server</module>
+    <module>department-service</module>
+    <module>employee-service</module>
+  </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
