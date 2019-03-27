@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,6 +41,6 @@ public class Department extends BaseEntity {
   @Column(name = "NAME", nullable = false)
   private String name;
 
-//  @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", fetch = FetchType.LAZY)
-//  private List<Employee> employees = Lists.newArrayList();
+  @Transient
+  private List<String> employeeIds = Lists.newArrayList();
 }
