@@ -21,4 +21,6 @@ public interface DepartmentService {
     Page<DepartmentDTO> findByCriteria(DepartmentDTO departmentDTO, Integer curPage, Integer pageSize);
 
     void update(DepartmentDTO departmentDTO);
+
+    List<DepartmentDTO> findByIds(List<Long> ids);
 }

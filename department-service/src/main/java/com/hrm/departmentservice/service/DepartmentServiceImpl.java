@@ -40,6 +40,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         .map(department -> departmentConverter.convert2DTO(department))
         .orElse(null);
   }
+
   @Override
   public List<DepartmentDTO> findAll() {
     List<Department> departments = departmentRepository.findAll();
@@ -61,6 +62,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     departmentRepository
         .findById(departmentDTO.getId())
         .ifPresent(department -> department.setName(departmentDTO.getName()));
+  }
+
+  @Override
+  public List<DepartmentDTO> findByIds(List<Long> ids) {
+    List<Department> departments = departmentRepository.findByIdIn(ids);
+    return departmentConverter.convert2DTOS(departments);
   }
 
   public Page<DepartmentDTO> findByCriteria(

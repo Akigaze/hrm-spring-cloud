@@ -37,6 +37,12 @@ public class DepartmentController {
     return departmentService.findAll();
   }
 
+  @GetMapping("/ids")
+  public List<DepartmentDTO> getByIds(@RequestBody List<Long> ids){
+    List<DepartmentDTO> departmentDTOS = departmentService.findByIds(ids);
+    return departmentDTOS;
+  }
+
   @PostMapping
   public ResponseEntity save(@RequestBody DepartmentDTO departmentDTO) {
     departmentService.save(departmentDTO);
