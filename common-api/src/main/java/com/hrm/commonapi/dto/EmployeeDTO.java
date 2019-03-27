@@ -37,5 +37,5 @@ public class EmployeeDTO implements Serializable {
 
     private String gender;
 
-    private DepartmentDTO department;
+    private Long departmentId;
 }

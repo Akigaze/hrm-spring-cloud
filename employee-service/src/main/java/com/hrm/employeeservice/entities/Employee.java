@@ -64,9 +64,6 @@ public class Employee extends BaseEntity {
   @Column(name = "GENDER", nullable = false)
   private String gender;
 
-//  @JsonManagedReference
-//  @JsonBackReference
-//  @ManyToOne
-//  @JoinColumn(name = "DEPARTMENT_ID")
-//  private Department department;
+  @Column(name = "DEPARTMENT_ID")
+  private Long departmentId;
 }

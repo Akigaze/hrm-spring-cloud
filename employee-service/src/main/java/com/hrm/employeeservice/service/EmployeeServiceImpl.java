@@ -32,10 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmployeeServiceImpl implements EmployeeService {
   @Autowired
   private EmployeeRepository employeeRepository;
-//  @Autowired
-//  private DepartmentRepository departmentRepository;
   @Autowired
   private EmployeeConverter employeeConverter;
+  @Autowired
+  private DepartmentFeign departmentFeign;
 
   @Override
   public EmployeeDTO getOne(Long employeeId) {
@@ -53,11 +53,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public void save(EmployeeDTO employeeDTO) {
+    DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartmentId());
     Employee employee = employeeConverter.convert2Entity(employeeDTO);
-    DepartmentDTO department = employeeDTO.getDepartment();
-//    if (Objects.nonNull(department)) {
-//      departmentRepository.findById(department.getId()).ifPresent(employee::setDepartment);
-//    }
+    if (one == null){
+      employee.setDepartmentId(null);
+    }
     employeeRepository.save(employee);
   }
 
@@ -97,28 +97,30 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   private Specification<Employee> buildCriteria(EmployeeDTO employeeDTO) {
-    return (root, criteriaQuery, criteriaBuilder) -> {
-      List<Predicate> list = Lists.newArrayList();
-      if (StringUtils.isNotBlank(employeeDTO.getName())) {
-        list.add(criteriaBuilder.or(
-            criteriaBuilder.like(root.get("name"), "%" + employeeDTO.getName() + "%"),
-            criteriaBuilder.like(root.get("englishName"), "%" + employeeDTO.getName() + "%")
-        ));
-      }
-      if (Objects.nonNull(employeeDTO.getId())) {
-        list.add(criteriaBuilder.equal(root.get("id"), employeeDTO.getId()));
-      }
-      if (Objects.nonNull(employeeDTO.getBirthday())) {
-        list.add(criteriaBuilder.equal(root.get("birthday"), employeeDTO.getBirthday()));
-      }
-      if (Objects.nonNull(employeeDTO.getMobilePhone())) {
-        list.add(criteriaBuilder.like(root.get("mobilePhone"), "%" + employeeDTO.getMobilePhone() + "%"));
-      }
-      if (Objects.nonNull(employeeDTO.getDepartment())) {
-        list.add(criteriaBuilder.equal(root.get("department"), employeeDTO.getDepartment().getId()));
-      }
-      Predicate[] predicates = new Predicate[list.size()];
-      return criteriaQuery.where(list.toArray(predicates)).getRestriction();
-    };
+//    return (root, criteriaQuery, criteriaBuilder) -> {
+//      List<Predicate> list = Lists.newArrayList();
+//      if (StringUtils.isNotBlank(employeeDTO.getName())) {
+//        list.add(criteriaBuilder.or(
+//            criteriaBuilder.like(root.get("name"), "%" + employeeDTO.getName() + "%"),
+//            criteriaBuilder.like(root.get("englishName"), "%" + employeeDTO.getName() + "%")
+//        ));
+//      }
+//      if (Objects.nonNull(employeeDTO.getId())) {
+//        list.add(criteriaBuilder.equal(root.get("id"), employeeDTO.getId()));
+//      }
+//      if (Objects.nonNull(employeeDTO.getBirthday())) {
+//        list.add(criteriaBuilder.equal(root.get("birthday"), employeeDTO.getBirthday()));
+//      }
+//      if (Objects.nonNull(employeeDTO.getMobilePhone())) {
+//        list.add(criteriaBuilder.like(root.get("mobilePhone"), "%" + employeeDTO.getMobilePhone() + "%"));
+//      }
+//      if (Objects.nonNull(employeeDTO.getDepartment())) {
+//        list.add(criteriaBuilder.equal(root.get("department"), employeeDTO.getDepartment().getId()));
+//      }
+//      Predicate[] predicates = new Predicate[list.size()];
+//      return criteriaQuery.where(list.toArray(predicates)).getRestriction();
+//    };
+
+    return null;
   }
 }

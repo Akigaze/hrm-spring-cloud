@@ -33,14 +33,6 @@ public class EmployeeController {
     return employeeService.getOne(employeeId);
   }
 
-  @PostMapping("list")
-  public Page<EmployeeDTO> findAll(
-      @RequestBody EmployeeDTO employeeDTO,
-      @RequestParam(defaultValue = "1", required = false) Integer curPage,
-      @RequestParam(defaultValue = "20", required = false) Integer pageSize) {
-    return employeeService.findByCriteria(employeeDTO, curPage - 1, pageSize);
-  }
-
   @GetMapping
   public List<EmployeeDTO> findAll() {
     return employeeService.findAll();
@@ -62,5 +54,13 @@ public class EmployeeController {
   public ResponseEntity delete(@PathVariable("id") Long id) {
     employeeService.deleteById(id);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @PostMapping("list")
+  public Page<EmployeeDTO> findAll(
+      @RequestBody EmployeeDTO employeeDTO,
+      @RequestParam(defaultValue = "1", required = false) Integer curPage,
+      @RequestParam(defaultValue = "20", required = false) Integer pageSize) {
+    return employeeService.findByCriteria(employeeDTO, curPage - 1, pageSize);
   }
 }
