@@ -3,6 +3,7 @@ package com.hrm.departmentservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringCloudApplication
 @EnableFeignClients
