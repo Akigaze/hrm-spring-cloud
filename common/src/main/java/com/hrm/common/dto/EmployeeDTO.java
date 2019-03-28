@@ -1,4 +1,4 @@
-package com.hrm.commonapi.dto;
+package com.hrm.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,13 +40,13 @@ public class EmployeeDTO implements Serializable {
 
     private DepartmentDTO department;
 
-    @JsonIgnore
-    public Long getDepartmentId(){
-        return department.getId();
-    }
-
-    @JsonIgnore
-    public String getDepartmentName(){
-        return department.getName();
-    }
+//    @JsonIgnore
+//    public Long getDepartmentId(){
+//        return department.getId();
+//    }
+//
+//    @JsonIgnore
+//    public String getDepartmentName(){
+//        return department.getName();
+//    }
 }

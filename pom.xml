@@ -15,7 +15,6 @@
     <module>gateway-server</module>
     <module>department-service</module>
     <module>employee-service</module>
-    <module>common-api</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

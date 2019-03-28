@@ -1,4 +1,4 @@
-package com.hrm.commonapi.exceptions;
+package com.hrm.common.exceptions;
 
 public class BusinessException extends RuntimeException {
 }

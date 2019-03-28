@@ -1,8 +1,9 @@
 package com.hrm.employeeservice.service;
 
-import com.hrm.commonapi.dto.DepartmentDTO;
-import com.hrm.commonapi.dto.EmployeeDTO;
-import com.hrm.commonapi.services.EmployeeService;
+import com.google.common.collect.Lists;
+import com.hrm.common.dto.DepartmentDTO;
+import com.hrm.common.dto.EmployeeDTO;
+import com.hrm.common.services.EmployeeService;
 import com.hrm.employeeservice.convert.EmployeeConverter;
 import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
@@ -11,6 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.Predicate;
 
 /**
  * @author LIULE9
@@ -50,7 +54,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         .map(Employee::getDepartmentId)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-//    List<DepartmentDTO> departments = departmentFeign.getAll();
     List<DepartmentDTO> departments = departmentFeign.getByIds(departmentIds);
 
     return employeeConverter.convert2DTOS(employees, departments);
@@ -58,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public void save(EmployeeDTO employeeDTO) {
-    DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartmentId());
+    DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartment().getId());
     Employee employee = employeeConverter.convert2Entity(employeeDTO);
     if (one == null){
       employee.setDepartmentId(null);
@@ -102,30 +105,28 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   private Specification<Employee> buildCriteria(EmployeeDTO employeeDTO) {
-//    return (root, criteriaQuery, criteriaBuilder) -> {
-//      List<Predicate> list = Lists.newArrayList();
-//      if (StringUtils.isNotBlank(employeeDTO.getName())) {
-//        list.add(criteriaBuilder.or(
-//            criteriaBuilder.like(root.get("name"), "%" + employeeDTO.getName() + "%"),
-//            criteriaBuilder.like(root.get("englishName"), "%" + employeeDTO.getName() + "%")
-//        ));
-//      }
-//      if (Objects.nonNull(employeeDTO.getId())) {
-//        list.add(criteriaBuilder.equal(root.get("id"), employeeDTO.getId()));
-//      }
-//      if (Objects.nonNull(employeeDTO.getBirthday())) {
-//        list.add(criteriaBuilder.equal(root.get("birthday"), employeeDTO.getBirthday()));
-//      }
-//      if (Objects.nonNull(employeeDTO.getMobilePhone())) {
-//        list.add(criteriaBuilder.like(root.get("mobilePhone"), "%" + employeeDTO.getMobilePhone() + "%"));
-//      }
-//      if (Objects.nonNull(employeeDTO.getDepartment())) {
-//        list.add(criteriaBuilder.equal(root.get("department"), employeeDTO.getDepartment().getId()));
-//      }
-//      Predicate[] predicates = new Predicate[list.size()];
-//      return criteriaQuery.where(list.toArray(predicates)).getRestriction();
-//    };
-
-    return null;
+    return (root, criteriaQuery, criteriaBuilder) -> {
+      List<Predicate> list = Lists.newArrayList();
+      if (StringUtils.isNotBlank(employeeDTO.getName())) {
+        list.add(criteriaBuilder.or(
+            criteriaBuilder.like(root.get("name"), "%" + employeeDTO.getName() + "%"),
+            criteriaBuilder.like(root.get("englishName"), "%" + employeeDTO.getName() + "%")
+        ));
+      }
+      if (Objects.nonNull(employeeDTO.getId())) {
+        list.add(criteriaBuilder.equal(root.get("id"), employeeDTO.getId()));
+      }
+      if (Objects.nonNull(employeeDTO.getBirthday())) {
+        list.add(criteriaBuilder.equal(root.get("birthday"), employeeDTO.getBirthday()));
+      }
+      if (Objects.nonNull(employeeDTO.getMobilePhone())) {
+        list.add(criteriaBuilder.like(root.get("mobilePhone"), "%" + employeeDTO.getMobilePhone() + "%"));
+      }
+      if (Objects.nonNull(employeeDTO.getDepartment())) {
+        list.add(criteriaBuilder.equal(root.get("departmentId"), employeeDTO.getDepartment().getId()));
+      }
+      Predicate[] predicates = new Predicate[list.size()];
+      return criteriaQuery.where(list.toArray(predicates)).getRestriction();
+    };
   }
 }

@@ -1,6 +1,6 @@
-package com.hrm.commonapi.services;
+package com.hrm.common.services;
 
-import com.hrm.commonapi.dto.DepartmentDTO;
+import com.hrm.common.dto.DepartmentDTO;
 import java.util.List;
 import org.springframework.data.domain.Page;
 

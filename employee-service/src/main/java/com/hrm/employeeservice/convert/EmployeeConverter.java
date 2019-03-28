@@ -2,14 +2,16 @@ package com.hrm.employeeservice.convert;
 
 import static java.util.stream.Collectors.toList;
 
-import com.hrm.commonapi.dto.DepartmentDTO;
-import com.hrm.commonapi.dto.EmployeeDTO;
+import com.hrm.common.dto.DepartmentDTO;
+import com.hrm.common.dto.EmployeeDTO;
 import com.hrm.employeeservice.entities.Employee;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+
+import com.hrm.employeeservice.service.DepartmentFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,10 +22,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeConverter {
 
+  @Autowired private DepartmentFeign departmentFeign;
+
   public EmployeeDTO convert2DTO(Employee employee) {
     EmployeeDTO employeeDTO = new EmployeeDTO();
     DepartmentDTO departmentDTO= new DepartmentDTO();
     departmentDTO.setId(employee.getDepartmentId());
+    DepartmentDTO one = departmentFeign.getOne(employee.getDepartmentId());
+    departmentDTO.setName(Objects.nonNull(one)?one.getName():null);
     BeanUtils.copyProperties(employee, employeeDTO);
     employeeDTO.setDepartment(departmentDTO);
     return employeeDTO;
@@ -43,7 +49,7 @@ public class EmployeeConverter {
     List<EmployeeDTO> employeeDTOS = this.convert2DTOS(employees);
     employeeDTOS.forEach(employee -> {
       departments.stream()
-          .filter(department -> department.getId().equals(employee.getDepartmentId())).findFirst()
+          .filter(department -> department.getId().equals(employee.getDepartment().getId())).findFirst()
           .ifPresent(employee::setDepartment);
     });
     return employeeDTOS;

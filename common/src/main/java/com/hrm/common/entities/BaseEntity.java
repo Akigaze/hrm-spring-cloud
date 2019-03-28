@@ -1,4 +1,4 @@
-package com.hrm.commonapi.entities;
+package com.hrm.common.entities;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

@@ -1,6 +1,6 @@
 package com.hrm.employeeservice.service;
 
-import com.hrm.commonapi.dto.DepartmentDTO;
+import com.hrm.common.dto.DepartmentDTO;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;

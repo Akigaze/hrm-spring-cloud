@@ -1,4 +1,4 @@
-package com.hrm.commonapi.dto;
+package com.hrm.common.dto;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
