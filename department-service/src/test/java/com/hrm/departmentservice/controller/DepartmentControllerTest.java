@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ComponentScan(basePackages = {"com.hrm.admin"})
+@ComponentScan(basePackages = {"com.hrm.departmentservice"})
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = Replace.AUTO_CONFIGURED)
@@ -55,7 +55,7 @@ public class DepartmentControllerTest {
 
     given(repository.findById(1L)).willReturn(Optional.of(iris));
 
-    mockMvc.perform(get("/departments/1"))
+    mockMvc.perform(get("/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name", is("Iris")))
         .andExpect(jsonPath("$.id", is(1)));
@@ -69,7 +69,7 @@ public class DepartmentControllerTest {
 
     given(repository.findAll()).willReturn(departments);
 
-    mockMvc.perform(get("/departments")).andExpect(status().isOk())
+    mockMvc.perform(get("/")).andExpect(status().isOk())
         .andExpect(jsonPath("$",hasSize(2)))
         .andExpect(jsonPath("$[0].name", is("Iris")))
         .andExpect(jsonPath("$[1].name", is("CargoSmart")))
@@ -85,7 +85,7 @@ public class DepartmentControllerTest {
     given(repository.save(iris)).willReturn(saved);
 
     ResultActions result = mockMvc.perform(
-        post("/departments")
+        post("/")
             .contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(new DepartmentDTO(1L,"Iris")))
     );
@@ -100,7 +100,7 @@ public class DepartmentControllerTest {
     given(repository.findById(1L)).willReturn(Optional.of(iris));
     doNothing().when(repository).delete(iris);
 
-    ResultActions result = mockMvc.perform(delete("/departments/1"));
+    ResultActions result = mockMvc.perform(delete("/1"));
 
     result.andExpect(status().isNoContent()).andDo(print());
     verify(repository, times(1)).findById(1L);
@@ -113,7 +113,7 @@ public class DepartmentControllerTest {
     given(repository.findById(1L)).willReturn(Optional.of(originDepartment));
 
     ResultActions result = mockMvc.perform(
-        put("/departments")
+        put("/")
             .contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(new DepartmentDTO(1L,"CargoSmart")))
     );
