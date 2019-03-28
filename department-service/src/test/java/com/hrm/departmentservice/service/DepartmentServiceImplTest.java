@@ -95,4 +95,21 @@ public class DepartmentServiceImplTest {
 
         assertThat("CargoSmart", is(department1.getName()));
     }
+
+    @Test
+    public void should_get_info_of_specific_department_when_give_the_ids() {
+        departmentRepository = mock(DepartmentRepository.class);
+        DepartmentServiceImpl service = new DepartmentServiceImpl(departmentRepository, new DepartmentConverter());
+        Department department = new Department();
+        department.setName("IRIS");
+        List<Long> ids = Lists.newArrayList();
+        ids.add(1L);
+        List<Department> departments = Lists.newArrayList();
+        departments.add(department);
+
+        when(departmentRepository.findByIdIn(ids)).thenReturn(departments);
+        List<DepartmentDTO> departmentDTOS = service.findByIds(ids);
+
+        assertThat(departmentDTOS.size(), is(departments.size()));
+    }
 }
