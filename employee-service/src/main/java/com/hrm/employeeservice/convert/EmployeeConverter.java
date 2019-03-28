@@ -1,5 +1,6 @@
 package com.hrm.employeeservice.convert;
 
+import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 import com.hrm.common.dto.DepartmentDTO;
@@ -28,8 +29,8 @@ public class EmployeeConverter {
     EmployeeDTO employeeDTO = new EmployeeDTO();
     DepartmentDTO departmentDTO= new DepartmentDTO();
     departmentDTO.setId(employee.getDepartmentId());
-    DepartmentDTO one = departmentFeign.getOne(employee.getDepartmentId());
-    departmentDTO.setName(Objects.nonNull(one)?one.getName():null);
+//    DepartmentDTO one = departmentFeign.getOne(employee.getDepartmentId());
+//    departmentDTO.setName(Objects.nonNull(one)?one.getName():null);
     BeanUtils.copyProperties(employee, employeeDTO);
     employeeDTO.setDepartment(departmentDTO);
     return employeeDTO;
@@ -57,5 +58,11 @@ public class EmployeeConverter {
           .ifPresent(employee::setDepartment);
     });
     return employeeDTOS;
+  }
+
+  public EmployeeDTO convert2DTO(Employee employee, DepartmentDTO departmentDTO) {
+    EmployeeDTO employeeDTO = this.convert2DTO(employee);
+    employeeDTO.setDepartment(departmentDTO);
+    return employeeDTO;
   }
 }

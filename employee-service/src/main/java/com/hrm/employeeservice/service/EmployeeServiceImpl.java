@@ -7,9 +7,11 @@ import com.hrm.common.services.EmployeeService;
 import com.hrm.employeeservice.convert.EmployeeConverter;
 import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -41,29 +43,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public EmployeeDTO getOne(Long employeeId) {
-    return employeeRepository
-        .findById(employeeId)
-        .map(employee -> employeeConverter.convert2DTO(employee))
-        .orElse(null);
+    Employee employee = employeeRepository.findById(employeeId).orElse(null);
+    if (employee != null) {
+      DepartmentDTO departmentDTO = departmentFeign.findById(employee.getDepartmentId());
+      return departmentDTO != null
+          ? employeeConverter.convert2DTO(employee, departmentDTO)
+          : employeeConverter.convert2DTO(employee);
+    }
+    return null;
   }
 
   @Override
   public List<EmployeeDTO> findAll() {
     List<Employee> employees = employeeRepository.findAll();
+    List<DepartmentDTO> departments = getDepartmentOfEmployees(employees);
+
+    return employeeConverter.convert2DTOS(employees, departments);
+  }
+
+  private List<DepartmentDTO> getDepartmentOfEmployees(List<Employee> employees) {
     List<Long> departmentIds = employees.stream()
         .map(Employee::getDepartmentId)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-    List<DepartmentDTO> departments = departmentFeign.getByIds(departmentIds);
-
-    return employeeConverter.convert2DTOS(employees, departments);
+    return departmentFeign.getByIds(departmentIds);
   }
 
   @Override
   public void save(EmployeeDTO employeeDTO) {
     DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartment().getId());
     Employee employee = employeeConverter.convert2Entity(employeeDTO);
-    if (one != null){
+    if (one != null) {
       employee.setDepartmentId(one.getId());
     }
     employeeRepository.save(employee);
@@ -92,9 +102,9 @@ public class EmployeeServiceImpl implements EmployeeService {
               dbEmployee.setGender(employee.getGender());
 
               DepartmentDTO department = employeeDTO.getDepartment();
-              if (department != null){
+              if (department != null) {
                 DepartmentDTO departmentDTO = departmentFeign.findById(department.getId());
-                if (departmentDTO != null){
+                if (departmentDTO != null) {
                   dbEmployee.setDepartmentId(departmentDTO.getId());
                 }
               }
@@ -107,8 +117,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     PageRequest pageRequest = PageRequest.of(curPage, pageSize);
     Specification<Employee> specification = buildCriteria(employeeDTO);
     Page<Employee> page = employeeRepository.findAll(specification, pageRequest);
+    List<Employee> employees = page.getContent();
+    List<DepartmentDTO> departmentDTOS = this.getDepartmentOfEmployees(employees);
     return new PageImpl<>(
-        employeeConverter.convert2DTOS(page.getContent()), pageRequest, page.getTotalElements());
+        employeeConverter.convert2DTOS(employees, departmentDTOS), pageRequest, page.getTotalElements());
   }
 
   private Specification<Employee> buildCriteria(EmployeeDTO employeeDTO) {
