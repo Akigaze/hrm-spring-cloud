@@ -1,6 +1,7 @@
 package com.hrm.commonapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -37,5 +38,15 @@ public class EmployeeDTO implements Serializable {
 
     private String gender;
 
-    private Long departmentId;
+    private DepartmentDTO department;
+
+    @JsonIgnore
+    public Long getDepartmentId(){
+        return department.getId();
+    }
+
+    @JsonIgnore
+    public String getDepartmentName(){
+        return department.getName();
+    }
 }

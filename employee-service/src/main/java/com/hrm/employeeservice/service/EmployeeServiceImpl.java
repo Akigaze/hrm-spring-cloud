@@ -1,6 +1,5 @@
 package com.hrm.employeeservice.service;
 
-import com.google.common.collect.Lists;
 import com.hrm.commonapi.dto.DepartmentDTO;
 import com.hrm.commonapi.dto.EmployeeDTO;
 import com.hrm.commonapi.services.EmployeeService;
@@ -9,10 +8,9 @@ import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.criteria.Predicate;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,7 +46,14 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public List<EmployeeDTO> findAll() {
     List<Employee> employees = employeeRepository.findAll();
-    return employeeConverter.convert2DTOS(employees);
+    List<Long> departmentIds = employees.stream()
+        .map(Employee::getDepartmentId)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+//    List<DepartmentDTO> departments = departmentFeign.getAll();
+    List<DepartmentDTO> departments = departmentFeign.getByIds(departmentIds);
+
+    return employeeConverter.convert2DTOS(employees, departments);
   }
 
   @Override

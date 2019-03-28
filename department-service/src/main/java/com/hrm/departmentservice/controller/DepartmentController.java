@@ -37,7 +37,7 @@ public class DepartmentController {
     return departmentService.findAll();
   }
 
-  @GetMapping("/ids")
+  @PostMapping("/ids")
   public List<DepartmentDTO> getByIds(@RequestBody List<Long> ids){
     List<DepartmentDTO> departmentDTOS = departmentService.findByIds(ids);
     return departmentDTOS;
