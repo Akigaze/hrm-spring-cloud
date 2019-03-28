@@ -113,5 +113,23 @@ public class EmployeeControllerTest {
     verify(employeeRepository, times(1)).findById(1L);
     verify(employeeRepository, times(1)).delete(quinn);
   }
+  @Test
+  public void should_update_the_specific_employee_when_give_id() throws Exception {
+    Employee originEmployee = new Employee(1L, "SomeBody", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男",
+        cargoSmart.getId());
+    EmployeeDTO dto = new EmployeeDTO(1L, "Quinn", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", new DepartmentDTO(1L, "CargoSmart"));
 
+    given(employeeRepository.findById(1L)).willReturn(Optional.of(originEmployee));
+    given(departmentRepository.findById(1L)).willReturn(Optional.of(cargoSmart));
+
+    ResultActions result = mockMvc.perform(
+        put("/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(dto))
+    );
+
+    result.andExpect(status().isNoContent()).andDo(print());
+    verify(employeeRepository, times(1)).findById(1L);
+    assertThat(originEmployee.getName(), is("Quinn"));
+  }
 }
