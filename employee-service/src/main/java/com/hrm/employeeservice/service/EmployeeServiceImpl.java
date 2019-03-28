@@ -63,8 +63,8 @@ public class EmployeeServiceImpl implements EmployeeService {
   public void save(EmployeeDTO employeeDTO) {
     DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartment().getId());
     Employee employee = employeeConverter.convert2Entity(employeeDTO);
-    if (one == null){
-      employee.setDepartmentId(null);
+    if (one != null){
+      employee.setDepartmentId(one.getId());
     }
     employeeRepository.save(employee);
   }

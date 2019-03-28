@@ -21,4 +21,7 @@ public interface DepartmentFeign {
 
   @GetMapping
   List<DepartmentDTO> getAll();
+
+  @GetMapping("/{id}")
+  DepartmentDTO findById(@PathVariable("id") Long id);
 }
