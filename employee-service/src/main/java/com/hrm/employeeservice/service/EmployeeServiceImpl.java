@@ -90,7 +90,14 @@ public class EmployeeServiceImpl implements EmployeeService {
               dbEmployee.setNationality(employee.getNationality());
               dbEmployee.setMonthlySalary(employee.getMonthlySalary());
               dbEmployee.setGender(employee.getGender());
-//              dbEmployee.setDepartment(departmentRepository.findById(employeeDTO.getDepartment().getId()).get());
+
+              DepartmentDTO department = employeeDTO.getDepartment();
+              if (department != null){
+                DepartmentDTO departmentDTO = departmentFeign.findById(department.getId());
+                if (departmentDTO != null){
+                  dbEmployee.setDepartmentId(departmentDTO.getId());
+                }
+              }
             });
   }
 
