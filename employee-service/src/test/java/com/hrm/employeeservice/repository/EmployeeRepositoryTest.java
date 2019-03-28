@@ -68,4 +68,25 @@ public class EmployeeRepositoryTest {
     assertThat(employee, equalTo(jeffery));
   }
 
+  @Test
+  public void should_save_the_specific_employee_to_db() {
+    entityManager.persist(quinn);
+
+    Employee saved = repository.save(jeffery);
+    Employee second = entityManager.find(Employee.class, jeffery.getId());
+
+    assertThat(saved, equalTo(jeffery));
+    assertThat(second, equalTo(jeffery));
+  }
+
+  @Test
+  public void should_delete_specific_employee_from_db() {
+    entityManager.persist(quinn);
+    entityManager.persist(jeffery);
+
+    repository.delete(jeffery);
+    Employee found = entityManager.find(Employee.class, jeffery.getId());
+
+    assertThat(found, equalTo(null));
+  }
 }
