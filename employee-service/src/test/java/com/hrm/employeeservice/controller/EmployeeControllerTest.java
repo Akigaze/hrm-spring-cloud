@@ -4,8 +4,6 @@ package com.hrm.employeeservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrm.common.dto.DepartmentDTO;
 import com.hrm.common.dto.EmployeeDTO;
-import com.hrm.departmentservice.entities.Department;
-import com.hrm.departmentservice.repository.DepartmentRepository;
 import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.junit.Test;
@@ -45,16 +43,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
 public class EmployeeControllerTest {
-  private Department cargoSmart = new Department(1L, "CargoSmart", new ArrayList<>());
-  private Employee quinn = new Employee(1L, "Quinn", LocalDate.now(), "134322561", "4421334199511112356", "Quinn Huang", "汉", "广州","男", "2125121",
-      cargoSmart.getId());
-  private Employee jeffery = new Employee(2L, "Jeffery", LocalDate.now(), "155120356", "4421334199602124545", "Jeffery Lu", "汉", "深圳","男", "2125121",
-      cargoSmart.getId());
+  private Employee quinn = new Employee(1L, "Quinn", LocalDate.now(), "134322561", "4421334199511112356", "Quinn Huang", "汉", "广州","男", "2125121", 1L);
+  private Employee jeffery = new Employee(2L, "Jeffery", LocalDate.now(), "155120356", "4421334199602124545", "Jeffery Lu", "汉", "深圳","男", "2125121", 1L);
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper mapper;
 
-  @MockBean
-  private DepartmentRepository departmentRepository;
   @MockBean
   private EmployeeRepository employeeRepository;
 
@@ -85,11 +78,9 @@ public class EmployeeControllerTest {
   public void should_save_the_given_employee() throws Exception {
     Employee leo = new Employee();
     leo.setName("Leo");
-    Employee saved = new Employee(1L, "Leo", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男",
-        cargoSmart.getId());
+    Employee saved = new Employee(1L, "Leo", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", 1L);
     EmployeeDTO dto = new EmployeeDTO(1L, "Leo", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", new DepartmentDTO(1L, "CargoSmart"));
 
-    given(departmentRepository.findById(1L)).willReturn(Optional.of(cargoSmart));
     given(employeeRepository.save(leo)).willReturn(saved);
 
     ResultActions result = mockMvc.perform(
@@ -115,12 +106,10 @@ public class EmployeeControllerTest {
   }
   @Test
   public void should_update_the_specific_employee_when_give_id() throws Exception {
-    Employee originEmployee = new Employee(1L, "SomeBody", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男",
-        cargoSmart.getId());
+    Employee originEmployee = new Employee(1L, "SomeBody", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", 1L);
     EmployeeDTO dto = new EmployeeDTO(1L, "Quinn", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", new DepartmentDTO(1L, "CargoSmart"));
 
     given(employeeRepository.findById(1L)).willReturn(Optional.of(originEmployee));
-    given(departmentRepository.findById(1L)).willReturn(Optional.of(cargoSmart));
 
     ResultActions result = mockMvc.perform(
         put("/")

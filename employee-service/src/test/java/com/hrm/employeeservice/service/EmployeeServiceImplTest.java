@@ -3,12 +3,10 @@ package com.hrm.employeeservice.service;
 import com.google.common.collect.Lists;
 import com.hrm.common.dto.DepartmentDTO;
 import com.hrm.common.dto.EmployeeDTO;
-import com.hrm.departmentservice.repository.DepartmentRepository;
 import com.hrm.employeeservice.convert.EmployeeConverter;
 import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.junit.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +18,11 @@ import static org.mockito.Mockito.*;
 public class EmployeeServiceImplTest {
 
   private EmployeeRepository employeeRepository;
-  private DepartmentRepository departmentRepository;
-//  @MockBean
   private DepartmentFeign departmentFeign;
 
   @Test
   public void should_get_one_employee_by_id(){
     employeeRepository = mock(EmployeeRepository.class);
-    departmentRepository = mock(DepartmentRepository.class);
     departmentFeign = mock(DepartmentFeign.class);
     EmployeeConverter converter = mock(EmployeeConverter.class);
     EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
@@ -43,7 +38,6 @@ public class EmployeeServiceImplTest {
   @Test
   public void should_get_info_of_all_employees() {
     employeeRepository = mock(EmployeeRepository.class);
-    departmentRepository = mock(DepartmentRepository.class);
     departmentFeign = mock(DepartmentFeign.class);
     EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
     Employee employee1 = new Employee();
@@ -63,7 +57,6 @@ public class EmployeeServiceImplTest {
   @Test
   public void should_delete_specific_employee_when_give_the_id() {
     employeeRepository = mock(EmployeeRepository.class);
-    departmentRepository = mock(DepartmentRepository.class);
     EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
     Employee employee = new Employee();
 

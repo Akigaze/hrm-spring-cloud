@@ -5,10 +5,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.hrm.departmentservice.entities.Department;
 import com.hrm.employeeservice.entities.Employee;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.Test;
@@ -24,13 +22,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.AUTO_CONFIGURED)
 public class EmployeeRepositoryTest {
-  private Department cargoSmart = new Department(1L, "CargoSmart", new ArrayList<>());
-  private Employee quinn = new Employee(1L, "Quinn", LocalDate.now(), "134322561", "4421334199511112356", "Quinn Huang", "汉", "广州","男", "2125121",
-      cargoSmart.getId());
-  private Employee jeffery = new Employee(2L, "Jeffery", LocalDate.now(), "155120356", "4421334199602124545", "Jeffery Lu", "汉", "深圳","男", "2125121",
-      cargoSmart.getId());
-  private Employee leo = new Employee(3L, "Leo", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男",
-      cargoSmart.getId());
+  private Employee quinn = new Employee(1L, "Quinn", LocalDate.now(), "134322561", "4421334199511112356", "Quinn Huang", "汉", "广州","男", "2125121", 1L);
+  private Employee jeffery = new Employee(2L, "Jeffery", LocalDate.now(), "155120356", "4421334199602124545", "Jeffery Lu", "汉", "深圳","男", "2125121", 1L);
+  private Employee leo = new Employee(3L, "Leo", LocalDate.now(), "137159852", "4421334199403235687", "Leo Liu", "汉", "珠海","120", "男", 1L);
 
   @Autowired
   private EmployeeRepository repository;
