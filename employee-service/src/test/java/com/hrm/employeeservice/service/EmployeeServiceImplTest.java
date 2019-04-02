@@ -18,14 +18,15 @@ import static org.mockito.Mockito.*;
 public class EmployeeServiceImplTest {
 
   private EmployeeRepository employeeRepository;
-  private DepartmentFeign departmentFeign;
+  private DepartmentService departmentService;
 
   @Test
   public void should_get_one_employee_by_id(){
     employeeRepository = mock(EmployeeRepository.class);
-    departmentFeign = mock(DepartmentFeign.class);
+    departmentService = mock(DepartmentService.class);
     EmployeeConverter converter = mock(EmployeeConverter.class);
-    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
+    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(),
+        departmentService);
 
     Employee employee = new Employee();
     employee.setName("Quinn");
@@ -38,8 +39,9 @@ public class EmployeeServiceImplTest {
   @Test
   public void should_get_info_of_all_employees() {
     employeeRepository = mock(EmployeeRepository.class);
-    departmentFeign = mock(DepartmentFeign.class);
-    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
+    departmentService = mock(DepartmentService.class);
+    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(),
+        departmentService);
     Employee employee1 = new Employee();
     employee1.setName("Tracy");
     Employee employee2 = new Employee();
@@ -48,7 +50,7 @@ public class EmployeeServiceImplTest {
     List<DepartmentDTO> departments = Lists.newArrayList();
 
     when(employeeRepository.findAll()).thenReturn(employees);
-    when(departmentFeign.getAll()).thenReturn(departments);
+    when(departmentService.getAll()).thenReturn(departments);
     List<EmployeeDTO> list = service.findAll();
 
     assertThat(employees.size(), is(list.size()));
@@ -57,7 +59,8 @@ public class EmployeeServiceImplTest {
   @Test
   public void should_delete_specific_employee_when_give_the_id() {
     employeeRepository = mock(EmployeeRepository.class);
-    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(), departmentFeign);
+    EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, new EmployeeConverter(),
+        departmentService);
     Employee employee = new Employee();
 
     when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));

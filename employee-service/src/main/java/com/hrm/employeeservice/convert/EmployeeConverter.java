@@ -7,9 +7,8 @@ import com.hrm.common.dto.DepartmentDTO;
 import com.hrm.common.dto.EmployeeDTO;
 import com.hrm.employeeservice.entities.Employee;
 import java.util.List;
-import java.util.Objects;
 
-import com.hrm.employeeservice.service.DepartmentFeign;
+import com.hrm.employeeservice.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeConverter {
 
-  @Autowired private DepartmentFeign departmentFeign;
+  @Autowired private DepartmentService departmentService;
 
   public EmployeeDTO convert2DTO(Employee employee) {
     EmployeeDTO employeeDTO = new EmployeeDTO();

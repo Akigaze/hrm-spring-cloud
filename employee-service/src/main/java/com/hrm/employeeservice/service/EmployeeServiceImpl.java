@@ -8,6 +8,7 @@ import com.hrm.employeeservice.convert.EmployeeConverter;
 import com.hrm.employeeservice.entities.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,13 +40,20 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Autowired
   private EmployeeConverter employeeConverter;
   @Autowired
-  private DepartmentFeign departmentFeign;
+  private DepartmentService departmentService;
+
+  public EmployeeDTO fallback(Long employeeId){
+    EmployeeDTO dto = new EmployeeDTO();
+    dto.setName("wrong id");
+    return dto;
+  }
 
   @Override
+  @HystrixCommand(fallbackMethod = "fallback")
   public EmployeeDTO getOne(Long employeeId) {
     Employee employee = employeeRepository.findById(employeeId).orElse(null);
     if (employee != null) {
-      DepartmentDTO departmentDTO = departmentFeign.findById(employee.getDepartmentId());
+      DepartmentDTO departmentDTO = departmentService.findById(employee.getDepartmentId());
       return departmentDTO != null
           ? employeeConverter.convert2DTO(employee, departmentDTO)
           : employeeConverter.convert2DTO(employee);
@@ -66,12 +74,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         .map(Employee::getDepartmentId)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-    return departmentFeign.getByIds(departmentIds);
+    return departmentService.getByIds(departmentIds);
   }
 
   @Override
   public void save(EmployeeDTO employeeDTO) {
-    DepartmentDTO one = departmentFeign.getOne(employeeDTO.getDepartment().getId());
+    DepartmentDTO one = departmentService.getOne(employeeDTO.getDepartment().getId());
     Employee employee = employeeConverter.convert2Entity(employeeDTO);
     if (one != null) {
       employee.setDepartmentId(one.getId());
@@ -103,7 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
               DepartmentDTO department = employeeDTO.getDepartment();
               if (department != null) {
-                DepartmentDTO departmentDTO = departmentFeign.findById(department.getId());
+                DepartmentDTO departmentDTO = departmentService.findById(department.getId());
                 if (departmentDTO != null) {
                   dbEmployee.setDepartmentId(departmentDTO.getId());
                 }

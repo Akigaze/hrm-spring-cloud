@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
 @FeignClient(name = "department-service")
-public interface DepartmentFeign {
+public interface DepartmentService {
 
   @GetMapping("/{id}")
   DepartmentDTO getOne(@PathVariable("id") Long departmentId);

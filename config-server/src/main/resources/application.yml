@@ -8,8 +8,8 @@ spring:
     config:
       server:
         git:
-          uri: https://gitee.com/lzc199/config-cloud
-          username: 454320130@qq.com
+          uri: https://github.com/Akigaze/spring-cloud-config-hrm
+          username: Akigaze
           password:
       profile: dev
 
